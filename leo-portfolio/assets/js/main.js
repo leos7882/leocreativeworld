@@ -1,0 +1,1 @@
+     rmdir /s /q path\to\your\repository

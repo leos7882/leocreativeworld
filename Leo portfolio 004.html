@@ -1,0 +1,282 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Leo Liu - Videographer, Editor, and Director Portfolio 2023-2025">
+    <title>Leo Liu | Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <h1>Leo Liu</h1>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#photography">Photography</a></li>
+                <li><a href="#videography">Videography</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Hi, I am Leo Liu</h1>
+            <h2>Cinematic Videographer & Editor</h2>
+            <p>I craft stunning visuals for corporate videos, creative shorts, and ads using BMPCC 6K, Adobe Premiere, and more.</p>
+            <div class="social-links">
+                <a href="https://instagram.com/1997tilinfinity">Instagram</a>
+                <a href="https://youtube.com">YouTube</a>
+            </div>
+            <!-- Replace with your showreel video ID -->
+            <div class="showreel">
+                <iframe width="100%" height="400" src="https://www.youtube.com/embed/your-showreel-id" title="Showreel" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>ABOUT ME</h2>
+            <div class="section-title-line"></div>
+            <div class="about-content">
+                <img src="headshot.jpg" alt="Leo Liu Headshot" class="about-image">
+                <div class="about-text">
+                    <h3>Hi There! I'm Leo Liu</h3>
+                    <h4>Videographer & Editor</h4>
+                    <p>With two years of experience, I’ve evolved from a blank canvas into a versatile filmmaker, excelling in directing, cinematography, and video editing. I specialize in corporate videos, creative shorts, music videos, and ads, using tools like BMPCC 6K, Z190, NX5, Adobe Premiere Pro, Adobe After Effects, Final Cut Pro, and Capcut. Let’s create something unforgettable!</p>
+                    <ul>
+                        <li><strong>Phone:</strong> <a href="tel:+85291432693">+852 91432693</a> / <a href="tel:+8613651414282">+86 13651414282</a></li>
+                        <li><strong>Email:</strong> <a href="mailto:leos7882@gmail.com">leos7882@gmail.com</a></li>
+                        <li><strong>Instagram:</strong> <a href="https://instagram.com/1997tilinfinity">1997tilinfinity</a></li>
+                        <li><strong>From:</strong> Hong Kong</li>
+                        <li><strong>Freelance:</strong> Available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photography Section -->
+    <section id="photography" class="photography">
+        <div class="container">
+            <h2>PHOTOGRAPHY</h2>
+            <div class="section-title-line"></div>
+            <p>Alongside my videography, I capture high-quality photos for events, corporate shoots, and creative projects, working with clients like Jardine House, St. Paul's Hospital, and Vistra.</p>
+            <div class="portfolio-gallery">
+                <div class="portfolio-item">
+                    <img src="photo1.jpg" alt="Corporate Event">
+                    <div class="portfolio-overlay">
+                        <h4>Corporate Event</h4>
+                        <p>Photography</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="photo2.jpg" alt="Wedding Shoot">
+                    <div class="portfolio-overlay">
+                        <h4>Wedding Shoot</h4>
+                        <p>Photography</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="photo3.jpg" alt="Outdoor Event">
+                    <div class="portfolio-overlay">
+                        <h4>Outdoor Event</h4>
+                        <p>Photography</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="photo4.jpg" alt="Creative Portrait">
+                    <div class="portfolio-overlay">
+                        <h4>Creative Portrait</h4>
+                        <p>Photography</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Videography Section -->
+    <section id="videography" class="videography">
+        <div class="container">
+            <h2>VIDEOGRAPHY</h2>
+            <div class="section-title-line"></div>
+            <div class="portfolio-gallery">
+                <div class="portfolio-item">
+                    <img src="hkedb-thumb.jpg" alt="HKEDB Projects Thumbnail">
+                    <div class="portfolio-overlay">
+                        <h4>HKEDB Projects</h4>
+                        <p>Director, Videographer, Editor</p>
+                    </div>
+                    <div class="video-gallery">
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/1Cy9YBOXQV8" title="Project 1" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/i0aGyrCR1Eg" title="Project 2" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/KheHi2Jlsdc" title="Project 3" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/PARpeooxx5o" title="Project 4" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/rvJcOFN297I" title="Project 5" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/zWDJ_-QFCcQ" title="Project 6" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/9DW60Rc3-Kg" title="Project 7" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/YG2nOhTFesw" title="Project 8" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="hklcsd-thumb.jpg" alt="HKLCSD Projects Thumbnail">
+                    <div class="portfolio-overlay">
+                        <h4>Animal Directing and Video Shooting</h4>
+                        <p>HKLCSD Videos for Kids</p>
+                    </div>
+                    <div class="video-gallery">
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/eKhJDHH_g5g" title="Project 9" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/WzyXKM1VQ2Q" title="Project 10" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/Qwxq0AD9fSc" title="Project 11" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/SEf-F3R6wOc" title="Project 12" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/8wbWiv-3NBc" title="Project 13" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="corporate-thumb.jpg" alt="Corporate Projects Thumbnail">
+                    <div class="portfolio-overlay">
+                        <h4>Corporate Ads and Events</h4>
+                        <p>Jardine House, St. Paul's Hospital, Vistra</p>
+                    </div>
+                    <div class="video-gallery">
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/fl6gnlEJmHc" title="Project 14" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/WwuUMO09fHI" title="Project 15" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/d3XfJJlvDBg" title="Project 16" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/KOl_NVE3YzQ" title="Project 17" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/0JPptfFmrZA" title="Project 18" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/vK8RnkD4dkg" title="Project 19" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/NtmJNtDiv1E" title="Project 20" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/ZMY0ng-v26U" title="Project 21" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="misc-thumb.jpg" alt="Miscellaneous Projects Thumbnail">
+                    <div class="portfolio-overlay">
+                        <h4>Miscellaneous Projects</h4>
+                        <p>Creative and Commercial Work</p>
+                    </div>
+                    <div class="video-gallery">
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/tCef2egwDoo" title="Project 22" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/ADzWRxNzySg" title="Project 23" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/a9jMYvTXVN4" title="Project 24" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/_PPIWpxHv_c" title="Project 25" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/O7-pNZVawh8" title="Project 26" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <h2>REVIEWS</h2>
+            <div class="section-title-line"></div>
+            <div class="review-gallery">
+                <div class="review-card">
+                    <p>“Leo’s work on our corporate video was exceptional, delivering cinematic quality on time.”</p>
+                    <img src="reviewer1.jpg" alt="Reviewer 1" class="reviewer-image">
+                    <h4>Client A</h4>
+                    <p>Marketing Manager</p>
+                </div>
+                <div class="review-card">
+                    <p>“The HKEDB project was elevated by Leo’s creative direction and editing skills.”</p>
+                    <img src="reviewer2.jpg" alt="Reviewer 2" class="reviewer-image">
+                    <h4>Client B</h4>
+                    <p>Event Organizer</p>
+                </div>
+                <div class="review-card">
+                    <p>“Leo’s professionalism and stunning visuals made our event unforgettable.”</p>
+                    <img src="reviewer3.jpg" alt="Reviewer 3" class="reviewer-image">
+                    <h4>Client C</h4>
+                    <p>Corporate Client</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>CONTACT ME</h2>
+            <div class="section-title-line"></div>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <h3>Just say Hello</h3>
+                    <form>
+                        <input type="text" placeholder="Name" required>
+                        <input type="email" placeholder="Email" required>
+                        <input type="text" placeholder="Subject" required>
+                        <textarea placeholder="Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h3>Contact Info</h3>
+                    <p>Let's create something cinematic together!</p>
+                    <ul>
+                        <li><strong>Email:</strong> <a href="mailto:leos7882@gmail.com">leos7882@gmail.com</a></li>
+                        <li><strong>Phone:</strong> <a href="tel:+85291432693">+852 91432693</a> / <a href="tel:+8613651414282">+86 13651414282</a></li>
+                        <li><strong>Instagram:</strong> <a href="https://instagram.com/1997tilinfinity">1997tilinfinity</a></li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="https://instagram.com/1997tilinfinity">Instagram</a>
+                        <a href="https://youtube.com">YouTube</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Liu Ying Shun. All rights reserved.</p>
+    </footer>
+</body>
+</html>
